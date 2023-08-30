@@ -54,9 +54,9 @@ module Log = struct
 end
 
 type stdenv = <
-  net : Eio.Net.t;
-  clock : Eio.Time.clock;
-  mono_clock : Eio.Time.Mono.t;
+  net : [ `Generic ] Eio.Net.ty Eio.Net.t;
+  clock : float Eio.Time.clock_ty Eio.Time.clock;
+  mono_clock :  Eio.Time.Mono.ty  Eio.Time.Mono.t;
 >
 
 module Switch = Eio.Switch
@@ -114,8 +114,8 @@ module Net = struct
     let unix path = `Unix path
   end
 
-  type in_channel = <Eio.Flow.source; Eio.Flow.close>
-  type out_channel = Eio.Flow.sink
+  type in_channel = [ Eio.Flow.source_ty | `Close ] Eio.Flow.source
+  type out_channel = Eio.Flow.sink_ty Eio.Flow.sink
 
   let getaddrinfo ~stdenv host port =
     try
